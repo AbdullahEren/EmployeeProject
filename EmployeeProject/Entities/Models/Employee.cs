@@ -20,6 +20,8 @@ namespace EmployeeProject.Entities.Models
 
         public Employee? Senior { get; set; }
 
+        public List<int>? Juniors { get; set; }
+
     }
 
 }

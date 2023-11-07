@@ -36,6 +36,10 @@ namespace EmployeeProject.Services
             {
                 throw new Exception("An employee cannot appoint yourself as a superior employee.");
             }
+            if(CheckIdNumber(employeeDto.IdNumber) == true)
+            {
+                throw new Exception("This id number is already exist.");
+            }
             var employee = _mapper.Map<Employee>(employeeDto);
             _manager.Employee.CreateEmployee(employee);
             _manager.Save();
@@ -51,10 +55,24 @@ namespace EmployeeProject.Services
             {
                 throw new Exception("An employee cannot appoint yourself as a superior employee.");
             }
-            
+            if (CheckIdNumber(employeeDto.IdNumber) == true)
+            {
+                throw new Exception("This id number is already exist.");
+            }
+
             var employee = _mapper.Map<Employee>(employeeDto);
             _manager.Employee.UpdateEmployee(id,employee);
             _manager.Save();
+        }
+
+        public List<int> GetJuniorIds(int id)
+        {
+            return _manager.Employee.GetJuniorIds(id);
+        }
+
+        public bool CheckIdNumber(string idNumber)
+        {
+            return _manager.Employee.CheckIdNumber(idNumber);
         }
     }
 }

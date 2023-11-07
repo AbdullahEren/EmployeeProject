@@ -9,5 +9,7 @@ namespace EmployeeProject.Services.Contracts
         Employee? GetEmployeeById(int id, bool trackChanges);
         void CreateEmployee(EmployeeDtoForCreation employeeDto);
         void UpdateEmployee(int id,EmployeeDtoForUpdate employeeDto);
+        List<int> GetJuniorIds(int id);
+        bool CheckIdNumber(string idNumber);
     }
 }

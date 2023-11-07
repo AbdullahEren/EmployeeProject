@@ -8,6 +8,8 @@ namespace EmployeeProject.Repositories.Contracts
         Employee? GetEmployeeById(int id, bool trackChanges);
         void CreateEmployee(Employee employee);
         void UpdateEmployee(int id, Employee employee);
+        bool CheckIdNumber(string idNumber);
+        List<int> GetJuniorIds(int id);
 
     }
 }
