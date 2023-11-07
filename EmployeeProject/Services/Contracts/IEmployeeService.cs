@@ -1,4 +1,5 @@
-﻿using EmployeeProject.Entities.Models;
+﻿using EmployeeProject.Entities.Dtos;
+using EmployeeProject.Entities.Models;
 
 namespace EmployeeProject.Services.Contracts
 {
@@ -6,7 +7,7 @@ namespace EmployeeProject.Services.Contracts
     {
         IEnumerable<Employee> GetAllEmployees(bool trackChanges);
         Employee? GetEmployeeById(int id, bool trackChanges);
-        void CreateEmployee(Employee employee);
-        void UpdateEmployee(Employee employee);
+        void CreateEmployee(EmployeeDtoForCreation employeeDto);
+        void UpdateEmployee(int id,EmployeeDtoForUpdate employeeDto);
     }
 }

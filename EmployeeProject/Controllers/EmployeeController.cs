@@ -1,4 +1,5 @@
-﻿using EmployeeProject.Entities.Models;
+﻿using EmployeeProject.Entities.Dtos;
+using EmployeeProject.Entities.Models;
 using EmployeeProject.Services.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,30 +39,30 @@ namespace EmployeeProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEmployee([FromBody] Employee employee)
+        public IActionResult CreateEmployee([FromBody] EmployeeDtoForCreation employeeDto)
         {
-            if (employee == null)
+            if (employeeDto == null)
             {
                 return BadRequest("Employee object is null");
             }
             else
             {
-                _serviceManager.EmployeeService.CreateEmployee(employee);
+                _serviceManager.EmployeeService.CreateEmployee(employeeDto);
                 return Ok();
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployee(int id, [FromBody] Employee employee)
+        public IActionResult UpdateEmployee(int id, [FromBody] EmployeeDtoForUpdate employeeDto)
         {
-            if (employee == null)
+            if (employeeDto == null)
             {
                 return BadRequest("Employee object is null");
             }
             else
             {
 
-                _serviceManager.EmployeeService.UpdateEmployee(employee);
+                _serviceManager.EmployeeService.UpdateEmployee(id,employeeDto);
                 return Ok();
             }
         }   

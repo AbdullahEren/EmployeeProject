@@ -4,6 +4,8 @@ namespace EmployeeProject.Entities.Dtos
 {
     public record EmployeeDtoForCreation 
     {
+        [Key]
+        public int EmployeeId { get; init; }
         [Required]
         public string FirstName { get; init; }
         [Required]

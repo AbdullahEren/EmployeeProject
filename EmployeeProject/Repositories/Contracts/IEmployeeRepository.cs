@@ -7,7 +7,7 @@ namespace EmployeeProject.Repositories.Contracts
         IEnumerable<Employee> GetAllEmployees(bool trackChanges);
         Employee? GetEmployeeById(int id, bool trackChanges);
         void CreateEmployee(Employee employee);
-        void UpdateEmployee(Employee employee);
+        void UpdateEmployee(int id, Employee employee);
 
     }
 }

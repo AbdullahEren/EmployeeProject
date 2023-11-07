@@ -4,8 +4,7 @@ namespace EmployeeProject.Entities.Dtos
 {
     public record EmployeeDtoForUpdate
     {
-
-        public int Id { get; init; }
+        
         [Required]
         public string FirstName { get; init; }
         [Required]

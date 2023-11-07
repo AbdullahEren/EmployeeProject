@@ -18,6 +18,10 @@ namespace EmployeeProject.Repositories
             return FindByCondition(a => a.EmployeeId.Equals(id), trackChanges);
         }
 
-        public void UpdateEmployee(Employee employee) => Update(employee);
+        public void UpdateEmployee(int id, Employee employee)
+        {
+            employee.EmployeeId = id;
+            Update(employee);
+        }
     }
 }
