@@ -1,6 +1,19 @@
-﻿namespace EmployeeProject.Entities.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EmployeeProject.Entities.Dtos
 {
-    public class EmployeeDtoForUpdate
+    public record EmployeeDtoForUpdate
     {
+
+        public int Id { get; init; }
+        [Required]
+        public string FirstName { get; init; }
+        [Required]
+        public string LastName { get; init; }
+        [Required]
+        [StringLength(11, MinimumLength = 11)]
+        [RegularExpression(@"^[a-zA-Z0-9]*$")]
+        public string IdNumber { get; init; }
+        public int? SeniorId { get; init; }
     }
 }

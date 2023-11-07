@@ -12,34 +12,14 @@ namespace EmployeeProject.Entities.Models
         public string? LastName { get; set; }
 
         [Required]
-        private string? idNumber;
-
-        public string IdNumber
-        {
-            get { return idNumber; }
-            set
-            {
-                if (IsAlphanumeric(value))
-                {
-                    idNumber = value;
-                }
-                else
-                {
-                    throw new ArgumentException("The Id number can only contain numbers and letters.");
-                }
-            }
-        }
+        [StringLength(11, MinimumLength = 11)]
+        [RegularExpression(@"^[a-zA-Z0-9]*$")]
+        public string IdNumber { get; set; }
 
         public int? SeniorId { get; set; }
 
         public Employee? Senior { get; set; }
 
-        
-        
-        private bool IsAlphanumeric(string text)
-        {
-            return !string.IsNullOrEmpty(text) && text.All(char.IsLetterOrDigit);
-        }
     }
 
 }
