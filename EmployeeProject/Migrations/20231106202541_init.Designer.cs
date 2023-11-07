@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeProject.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20231106164535_init")]
+    [Migration("20231106202541_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -61,16 +61,11 @@ namespace EmployeeProject.Migrations
             modelBuilder.Entity("EmployeeProject.Entities.Models.Employee", b =>
                 {
                     b.HasOne("EmployeeProject.Entities.Models.Employee", "Senior")
-                        .WithMany("Juniors")
+                        .WithMany()
                         .HasForeignKey("SeniorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Senior");
-                });
-
-            modelBuilder.Entity("EmployeeProject.Entities.Models.Employee", b =>
-                {
-                    b.Navigation("Juniors");
                 });
 #pragma warning restore 612, 618
         }

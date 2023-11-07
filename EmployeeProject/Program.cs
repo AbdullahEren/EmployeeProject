@@ -1,5 +1,7 @@
-
 using EmployeeProject.Repositories;
+using EmployeeProject.Repositories.Contracts;
+using EmployeeProject.Services;
+using EmployeeProject.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +16,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<RepositoryContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("mssqlconnection"), b => b.MigrationsAssembly("EmployeeProject"));
-    options.EnableSensitiveDataLogging(true);
+    
 });
+
+builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped<IServiceManager, ServiceManager>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

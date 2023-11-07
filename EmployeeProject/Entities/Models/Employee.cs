@@ -34,11 +34,8 @@ namespace EmployeeProject.Entities.Models
 
         public Employee? Senior { get; set; }
 
-        public List<Employee>? Juniors { get; set; }
         
         
-
-
         private bool IsAlphanumeric(string text)
         {
             return !string.IsNullOrEmpty(text) && text.All(char.IsLetterOrDigit);

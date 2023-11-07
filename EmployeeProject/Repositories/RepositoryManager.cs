@@ -4,16 +4,21 @@ namespace EmployeeProject.Repositories
 {
     public class RepositoryManager : IRepositoryManager
     {
-        private readonly RepositoryContext _context;
-        private IEmployeeRepository _employeeRepository;
+        private RepositoryContext _context;
+        private Lazy<IEmployeeRepository> _employeeRepository;
 
-        public RepositoryManager(RepositoryContext context, IEmployeeRepository employeeRepository)
+        public RepositoryManager(RepositoryContext repositoryContext)
         {
-            _context = context;
-            _employeeRepository = employeeRepository;
+            _context = repositoryContext;
+            _employeeRepository = new Lazy<IEmployeeRepository>(() => new EmployeeRepository(_context));
         }
 
-        public IEmployeeRepository Employee => _employeeRepository;
+        public IEmployeeRepository Employee => _employeeRepository.Value;
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
 
     }
 }

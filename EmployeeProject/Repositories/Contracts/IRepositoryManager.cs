@@ -4,5 +4,7 @@
     {
         IEmployeeRepository Employee { get; }
 
+        void Save();
+
     }
 }

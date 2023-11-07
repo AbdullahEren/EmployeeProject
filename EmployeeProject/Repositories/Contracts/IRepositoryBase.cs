@@ -6,7 +6,7 @@ namespace EmployeeProject.Repositories.Contracts
     {
         IEnumerable<T> FindAll(bool trackChanges);
         T? FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges);
-        Task CreateAsync(T entity);
-        Task UpdateAsync(T entity);
+        void Create(T entity);
+        void Update(T entity);
     }
 }

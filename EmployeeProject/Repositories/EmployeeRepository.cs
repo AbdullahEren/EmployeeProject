@@ -9,7 +9,7 @@ namespace EmployeeProject.Repositories
             : base(repositoryContext)
         {
         }
-        public async Task CreateEmployee(Employee employee) => await CreateAsync(employee);
+        public void CreateEmployee(Employee employee) => Create(employee);
 
         public IEnumerable<Employee> GetAllEmployees(bool trackChanges) => FindAll(trackChanges);
 
@@ -18,6 +18,6 @@ namespace EmployeeProject.Repositories
             return FindByCondition(a => a.EmployeeId.Equals(id), trackChanges);
         }
 
-        public async Task UpdateEmployee(Employee employee) => await UpdateAsync(employee);
+        public void UpdateEmployee(Employee employee) => Update(employee);
     }
 }

@@ -1,13 +1,12 @@
 ﻿using EmployeeProject.Entities.Models;
 
-namespace EmployeeProject.Repositories.Contracts
+namespace EmployeeProject.Services.Contracts
 {
-    public interface IEmployeeRepository : IRepositoryBase<Employee>
+    public interface IEmployeeService
     {
         IEnumerable<Employee> GetAllEmployees(bool trackChanges);
         Employee? GetEmployeeById(int id, bool trackChanges);
         void CreateEmployee(Employee employee);
         void UpdateEmployee(Employee employee);
-
     }
 }

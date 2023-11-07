@@ -13,16 +13,15 @@ namespace EmployeeProject.Repositories
             _context = context;
         }
 
-        public async Task CreateAsync(T entity)
+        public void Create(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+           _context.Set<T>().Add(entity);
+           
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
             _context.Set<T>().Update(entity);
-            await _context.SaveChangesAsync();
         }
 
 

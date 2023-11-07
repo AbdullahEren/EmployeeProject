@@ -25,9 +25,6 @@ namespace EmployeeProject.Repositories.Config
                 .HasForeignKey(e => e.SeniorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(e => e.Juniors)
-                .WithOne(s => s.Senior)
-                .HasForeignKey(s => s.SeniorId);
         }
     }
 
