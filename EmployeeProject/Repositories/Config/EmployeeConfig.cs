@@ -10,6 +10,8 @@ namespace EmployeeProject.Repositories.Config
         {
             builder.HasKey(e => e.EmployeeId);
 
+            
+
             builder.Property(e => e.FirstName)
                 .HasMaxLength(50)
                 .IsRequired();
@@ -19,11 +21,13 @@ namespace EmployeeProject.Repositories.Config
             builder.Property(e => e.IdNumber)
                 .HasMaxLength(11)
                 .IsRequired();
+                
 
             builder.HasOne(e => e.Senior)
                 .WithMany()
                 .HasForeignKey(e => e.SeniorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
         }
     }

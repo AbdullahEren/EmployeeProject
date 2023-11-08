@@ -10,6 +10,7 @@ namespace EmployeeProject.Infrastructure.Mapper
         {
             CreateMap<EmployeeDtoForCreation, Employee>();
             CreateMap<EmployeeDtoForUpdate, Employee>();
+            CreateMap<Employee, EmployeeDtoForRead>().ReverseMap();
 
         }
     }

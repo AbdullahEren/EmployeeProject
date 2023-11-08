@@ -1,6 +1,7 @@
 ﻿using EmployeeProject.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using EmployeeProject.Repositories.Config;
+using System.Globalization;
 
 namespace EmployeeProject.Repositories
 {
@@ -13,7 +14,6 @@ namespace EmployeeProject.Repositories
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.ApplyConfiguration(new EmployeeConfig());
         }
     }

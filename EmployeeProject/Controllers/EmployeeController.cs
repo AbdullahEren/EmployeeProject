@@ -18,16 +18,16 @@ namespace EmployeeProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllEmployees(bool trackChanges)
+        public async Task<IActionResult> GetAllEmployees(bool trackChanges)
         {
-            var employees = _serviceManager.EmployeeService.GetAllEmployees(trackChanges);
+            var employees = await _serviceManager.EmployeeService.GetAllEmployeesWithJuniors(trackChanges);
             return Ok(employees);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetEmployeeById(int id, bool trackChanges)
+        public async Task<IActionResult> GetEmployeeById(int id, bool trackChanges)
         {
-            var employee = _serviceManager.EmployeeService.GetEmployeeById(id, trackChanges);
+            var employee = await _serviceManager.EmployeeService.GetEmployeeWithJuniors(id, trackChanges);
             if (employee == null)
             {
                 return NotFound();
@@ -39,7 +39,7 @@ namespace EmployeeProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateEmployee([FromBody] EmployeeDtoForCreation employeeDto)
+        public async Task<IActionResult> CreateEmployee([FromBody] EmployeeDtoForCreation employeeDto)
         {
             if (employeeDto == null)
             {
@@ -47,13 +47,27 @@ namespace EmployeeProject.Controllers
             }
             else
             {
-                _serviceManager.EmployeeService.CreateEmployee(employeeDto);
+                if (await _serviceManager.EmployeeService.CheckIdNumber(employeeDto.IdNumber))
+                {
+                    return BadRequest("Employee with this id number already exists");
+                }
+                if(employeeDto.SeniorId != null && employeeDto.SeniorId != 0)
+                {
+                    
+                    if (await _serviceManager.EmployeeService.GetEmployeeById(employeeDto.SeniorId.Value, false) == null)
+                    {
+                        return BadRequest("Senior employee with this id does not exist");
+                    }
+                    
+                }
+                
+                await _serviceManager.EmployeeService.CreateEmployee(employeeDto);
                 return Ok();
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployee(int id, [FromBody] EmployeeDtoForUpdate employeeDto)
+        public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeDtoForUpdate employeeDto)
         {
             if (employeeDto == null)
             {
@@ -61,8 +75,23 @@ namespace EmployeeProject.Controllers
             }
             else
             {
+                var employee = await _serviceManager.EmployeeService.GetEmployeeById(id, false);
+                if (await _serviceManager.EmployeeService.CheckIdNumber(employeeDto.IdNumber) && employee.EmployeeId != id)
+                {
+                    return BadRequest("Employee with this id number already exists");
+                }
+                if (employeeDto.SeniorId != null && employeeDto.SeniorId != 0)
+                {
 
-                _serviceManager.EmployeeService.UpdateEmployee(id,employeeDto);
+                    if (await _serviceManager.EmployeeService.GetEmployeeById(employeeDto.SeniorId.Value, false) == null)
+                    {
+                        return BadRequest("Senior employee with this id does not exist");
+                    }
+
+                }
+               
+
+                await _serviceManager.EmployeeService.UpdateEmployee(id,employeeDto);
                 return Ok();
             }
         }   

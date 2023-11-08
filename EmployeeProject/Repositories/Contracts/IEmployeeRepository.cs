@@ -4,12 +4,12 @@ namespace EmployeeProject.Repositories.Contracts
 {
     public interface IEmployeeRepository : IRepositoryBase<Employee>
     {
-        IEnumerable<Employee> GetAllEmployees(bool trackChanges);
-        Employee? GetEmployeeById(int id, bool trackChanges);
-        void CreateEmployee(Employee employee);
-        void UpdateEmployee(int id, Employee employee);
-        bool CheckIdNumber(string idNumber);
-        List<int> GetJuniorIds(int id);
+        Task<IEnumerable<Employee>> GetAllEmployees(bool trackChanges);
+        Task<Employee?> GetEmployeeById(int id, bool trackChanges);
+        Task CreateEmployee(Employee employee);
+        Task UpdateEmployee(int id, Employee employee);
+        Task<bool> CheckIdNumber(string idNumber);
+        Task<List<int>> GetJuniorIds(int id, bool trackChanges);
 
     }
 }

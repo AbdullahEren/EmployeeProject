@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EmployeeProject.Entities.Models
 {
     public class Employee
     {
+        [Key]
         public int EmployeeId { get; set; }
 
         [Required]
@@ -20,8 +22,5 @@ namespace EmployeeProject.Entities.Models
 
         public Employee? Senior { get; set; }
 
-        public List<int>? Juniors { get; set; }
-
     }
-
 }

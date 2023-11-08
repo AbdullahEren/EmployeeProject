@@ -4,7 +4,7 @@
     {
         IEmployeeRepository Employee { get; }
 
-        void Save();
+        Task Save();
 
     }
 }

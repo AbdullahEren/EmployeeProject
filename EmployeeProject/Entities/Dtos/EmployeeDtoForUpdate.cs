@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EmployeeProject.Entities.Dtos
 {
@@ -13,6 +14,7 @@ namespace EmployeeProject.Entities.Dtos
         [StringLength(11, MinimumLength = 11)]
         [RegularExpression(@"^[a-zA-Z0-9]*$")]
         public string IdNumber { get; init; }
-        public int? SeniorId { get; init; }
+        [AllowNull]
+        public int? SeniorId { get; init; } 
     }
 }

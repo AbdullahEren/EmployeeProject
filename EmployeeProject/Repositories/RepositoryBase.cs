@@ -13,13 +13,13 @@ namespace EmployeeProject.Repositories
             _context = context;
         }
 
-        public void Create(T entity)
+        public async Task Create(T entity)
         {
-           _context.Set<T>().Add(entity);
+           await _context.Set<T>().AddAsync(entity);
            
         }
 
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             _context.Set<T>().Update(entity);
         }
@@ -27,17 +27,17 @@ namespace EmployeeProject.Repositories
 
 
 
-        public IEnumerable<T> FindAll(bool trackChanges)
+        public async Task<IEnumerable<T>> FindAll(bool trackChanges)
         {
             return  trackChanges
-                ? _context.Set<T>()
-                : _context.Set<T>().AsNoTracking();
+                ? await _context.Set<T>().ToListAsync()
+                : await _context.Set<T>().AsNoTracking().ToListAsync();
         }
-        public T? FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+        public async Task<IEnumerable<T>> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
         {
             return trackChanges
-                ?  _context.Set<T>().Where(expression).SingleOrDefault()
-                :  _context.Set<T>().Where(expression).AsNoTracking().SingleOrDefault();
+                ?  await _context.Set<T>().Where(expression).ToListAsync()
+                :  await _context.Set<T>().Where(expression).AsNoTracking().ToListAsync();
         }
 
     }

@@ -11,41 +11,34 @@ namespace EmployeeProject.Repositories
         {
         }
 
-        public bool CheckIdNumber(string idNumber)
+        public async Task<bool> CheckIdNumber(string idNumber)
         {
-            var employee = FindByCondition(a => a.IdNumber.Equals(idNumber), false);
-            if (employee is null)
+            var employee = await FindByCondition(a => a.IdNumber.Equals(idNumber), false);
+            if (employee.SingleOrDefault() is null)
                 return false;
             return true;
         }
 
-        public void CreateEmployee(Employee employee) => Create(employee);
+        public async Task CreateEmployee(Employee employee) => await Create(employee);
 
-        public IEnumerable<Employee> GetAllEmployees(bool trackChanges) => FindAll(trackChanges);
+        public async Task<IEnumerable<Employee>> GetAllEmployees(bool trackChanges) => await FindAll(trackChanges);
 
-        public Employee? GetEmployeeById(int id, bool trackChanges)
+        public async Task<Employee?> GetEmployeeById(int id, bool trackChanges)
         {
-            return FindByCondition(a => a.EmployeeId.Equals(id), trackChanges);
+            var employee = await FindByCondition(a => a.EmployeeId.Equals(id), trackChanges);
+            return employee.SingleOrDefault();
         }
 
-        public List<int> GetJuniorIds(int id)
+        public async Task<List<int>> GetJuniorIds(int id,bool trackChanges)
         {
-            var seniorId = GetAllEmployees(false).FirstOrDefault(a => a.EmployeeId.Equals(id))?.SeniorId;
-
-            if (seniorId.HasValue)
-            {
-                var juniors = GetAllEmployees(false).Where(a => a.SeniorId == seniorId).Select(a => a.EmployeeId).ToList();
-                return juniors;
-            }
-
-            return new List<int>();
+            var seniorId = await FindByCondition(a => a.SeniorId.Equals(id), trackChanges);
+            return seniorId.Select(a => a.EmployeeId).ToList();
         }
 
-
-        public void UpdateEmployee(int id, Employee employee)
+        public async Task UpdateEmployee(int id, Employee employee)
         {
             employee.EmployeeId = id;
-            Update(employee);
+            await Update(employee);
         }
     }
 }

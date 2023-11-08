@@ -18,61 +18,127 @@ namespace EmployeeProject.Services
         }
 
 
-        public IEnumerable<Employee> GetAllEmployees(bool trackChanges)
+        public async Task<IEnumerable<EmployeeDtoForRead>> GetAllEmployees(bool trackChanges)
         {
-            return _manager.Employee.GetAllEmployees(trackChanges);
+            var employees = await _manager.Employee.GetAllEmployees(trackChanges);
+            var employeesDto = _mapper.Map<IEnumerable<EmployeeDtoForRead>>(employees);
+            return employeesDto;
         }
 
-        public Employee? GetEmployeeById(int id, bool trackChanges)
+        public async Task<IEnumerable<EmployeeDtoForRead>> GetAllEmployeesWithJuniors(bool trackChanges)
         {
-            var employee = _manager.Employee.GetEmployeeById(id, trackChanges);
+            var employees = await _manager.Employee.GetAllEmployees(trackChanges);
+            var employeesDtoForRead = new List<EmployeeDtoForRead>();
+
+            foreach (var employee in employees)
+            {
+                var juniorIds = await _manager.Employee.GetJuniorIds(employee.EmployeeId, trackChanges);
+                var juniors = new List<EmployeeDtoForRead>();
+
+                foreach (var juniorId in juniorIds)
+                {
+                    var junior = await _manager.Employee.GetEmployeeById(juniorId, trackChanges);
+                    var juniorDto = _mapper.Map<EmployeeDtoForRead>(junior);
+                    if (juniorDto != null)
+                    {
+                        juniors.Add(juniorDto);
+                    }
+                }
+
+                employeesDtoForRead.Add(new EmployeeDtoForRead
+                {
+                    EmployeeId = employee.EmployeeId,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    IdNumber = employee.IdNumber,
+                    SeniorId = employee.SeniorId,
+                    Juniors = juniors
+                });
+            }
+
+            return employeesDtoForRead;
+        }
+
+
+        public async Task<EmployeeDtoForRead> GetEmployeeById(int id, bool trackChanges)
+        {
+            var employee = await _manager.Employee.GetEmployeeById(id, trackChanges);
+            var employeeDto = _mapper.Map<EmployeeDtoForRead>(employee);
+            
+            return employeeDto;
+        }
+        public async Task<EmployeeDtoForRead> GetEmployeeWithJuniors(int id, bool trackChanges)
+        {
+            var employee = await _manager.Employee.GetEmployeeById(id, trackChanges);
             if (employee is null)
-                throw new Exception("Employee can not found.");
-            return employee;
-        }
-        public void CreateEmployee(EmployeeDtoForCreation employeeDto)
-        {
-            if (employeeDto.SeniorId == employeeDto.EmployeeId)
+                throw new Exception("Employee cannot be found.");
+
+            var juniorIds = await _manager.Employee.GetJuniorIds(employee.EmployeeId, trackChanges);
+            var juniors = new List<EmployeeDtoForRead>();
+
+            foreach (var juniorId in juniorIds)
             {
-                throw new Exception("An employee cannot appoint yourself as a superior employee.");
+                var junior = await _manager.Employee.GetEmployeeById(juniorId, trackChanges);
+                var juniorDto = _mapper.Map<EmployeeDtoForRead>(junior);
+                if (juniorDto != null)
+                {
+                    juniors.Add(juniorDto);
+                }
             }
-            if(CheckIdNumber(employeeDto.IdNumber) == true)
+
+            return new EmployeeDtoForRead
             {
-                throw new Exception("This id number is already exist.");
-            }
-            var employee = _mapper.Map<Employee>(employeeDto);
-            _manager.Employee.CreateEmployee(employee);
-            _manager.Save();
+                EmployeeId = employee.EmployeeId,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                IdNumber = employee.IdNumber,
+                SeniorId = employee.SeniorId,
+                Juniors = juniors
+            };
         }
 
-        public void UpdateEmployee(int id, EmployeeDtoForUpdate employeeDto)
+        public async Task CreateEmployee(EmployeeDtoForCreation employeeDto)
         {
-            var entity = _manager.Employee.GetEmployeeById(id, false);
+    
+            var employee = _mapper.Map<Employee>(employeeDto);
+            if (employeeDto.SeniorId == 0)
+            {
+                employee.SeniorId = null;
+            }
+            await _manager.Employee.CreateEmployee(employee);
+            await _manager.Save();
+            
+        }
+
+        public async Task UpdateEmployee(int id, EmployeeDtoForUpdate employeeDto)
+        {
+            var entity = await _manager.Employee.GetEmployeeById(id, false);
             if (entity is null)
                 throw new Exception("Employee can not found.");
 
             if (employeeDto.SeniorId == entity.EmployeeId)
             {
-                throw new Exception("An employee cannot appoint yourself as a superior employee.");
+                throw new Exception("An employee cannot appoint yourself as a senior employee.");
             }
-            if (CheckIdNumber(employeeDto.IdNumber) == true)
-            {
-                throw new Exception("This id number is already exist.");
-            }
-
+            
             var employee = _mapper.Map<Employee>(employeeDto);
-            _manager.Employee.UpdateEmployee(id,employee);
-            _manager.Save();
+            if (employeeDto.SeniorId == 0)
+            {
+                employee.SeniorId = null;
+            }
+
+            await _manager.Employee.UpdateEmployee(id,employee);
+            await _manager.Save();
         }
 
-        public List<int> GetJuniorIds(int id)
+        public async Task<List<int>> GetJuniorIds(int id, bool trackChanges)
         {
-            return _manager.Employee.GetJuniorIds(id);
+            return await _manager.Employee.GetJuniorIds(id,trackChanges);
         }
 
-        public bool CheckIdNumber(string idNumber)
+        public async Task<bool> CheckIdNumber(string idNumber)
         {
-            return _manager.Employee.CheckIdNumber(idNumber);
+            return await _manager.Employee.CheckIdNumber(idNumber);
         }
     }
 }
